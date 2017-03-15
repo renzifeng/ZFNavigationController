@@ -1,5 +1,5 @@
 //
-//  ZFNavigationController.h
+//  UINavigationController+ZFFullscreenPopGesture.h
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+#import "ZFScreenShotView.h"
 
 typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewController, BOOL animated);
 
@@ -37,7 +38,7 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 
 @end
 
-@interface ZFNavigationController : UINavigationController
+@interface UINavigationController (ZFFullscreenPopGesture)<UIGestureRecognizerDelegate>
 
 @end
 

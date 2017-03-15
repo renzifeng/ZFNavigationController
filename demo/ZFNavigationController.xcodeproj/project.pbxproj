@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CCC20EB11E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC20EB01E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m */; };
 		CCD7ECD61E72A40000A9207F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECD51E72A40000A9207F /* main.m */; };
 		CCD7ECD91E72A40000A9207F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECD81E72A40000A9207F /* AppDelegate.m */; };
 		CCD7ECDC1E72A40100A9207F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECDB1E72A40100A9207F /* ViewController.m */; };
@@ -15,7 +16,6 @@
 		CCD7ECE41E72A40100A9207F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCD7ECE21E72A40100A9207F /* LaunchScreen.storyboard */; };
 		CCD7ECEF1E72A40200A9207F /* ZFNavigationControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECEE1E72A40200A9207F /* ZFNavigationControllerTests.m */; };
 		CCD7ECFA1E72A40200A9207F /* ZFNavigationControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECF91E72A40200A9207F /* ZFNavigationControllerUITests.m */; };
-		CCD7ED181E72AACD00A9207F /* ZFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ED151E72AACD00A9207F /* ZFNavigationController.m */; };
 		CCD7ED191E72AACD00A9207F /* ZFScreenShotView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CCC20EAF1E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+ZFFullscreenPopGesture.h"; sourceTree = "<group>"; };
+		CCC20EB01E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+ZFFullscreenPopGesture.m"; sourceTree = "<group>"; };
 		CCD7ECD11E72A40000A9207F /* ZFNavigationController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZFNavigationController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCD7ECD51E72A40000A9207F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CCD7ECD71E72A40000A9207F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,8 +55,6 @@
 		CCD7ECF51E72A40200A9207F /* ZFNavigationControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZFNavigationControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCD7ECF91E72A40200A9207F /* ZFNavigationControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFNavigationControllerUITests.m; sourceTree = "<group>"; };
 		CCD7ECFB1E72A40200A9207F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CCD7ED141E72AACD00A9207F /* ZFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFNavigationController.h; sourceTree = "<group>"; };
-		CCD7ED151E72AACD00A9207F /* ZFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFNavigationController.m; sourceTree = "<group>"; };
 		CCD7ED161E72AACD00A9207F /* ZFScreenShotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFScreenShotView.h; sourceTree = "<group>"; };
 		CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFScreenShotView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,8 +150,8 @@
 		CCD7ED131E72AACD00A9207F /* ZFNavigationController */ = {
 			isa = PBXGroup;
 			children = (
-				CCD7ED141E72AACD00A9207F /* ZFNavigationController.h */,
-				CCD7ED151E72AACD00A9207F /* ZFNavigationController.m */,
+				CCC20EAF1E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.h */,
+				CCC20EB01E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m */,
 				CCD7ED161E72AACD00A9207F /* ZFScreenShotView.h */,
 				CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */,
 			);
@@ -295,10 +295,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCC20EB11E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m in Sources */,
 				CCD7ECDC1E72A40100A9207F /* ViewController.m in Sources */,
 				CCD7ECD91E72A40000A9207F /* AppDelegate.m in Sources */,
 				CCD7ECD61E72A40000A9207F /* main.m in Sources */,
-				CCD7ED181E72AACD00A9207F /* ZFNavigationController.m in Sources */,
 				CCD7ED191E72AACD00A9207F /* ZFScreenShotView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

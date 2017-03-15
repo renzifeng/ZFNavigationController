@@ -128,7 +128,7 @@
         <!--Navigation Controller-->
         <scene sceneID="pHa-f1-f19">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xci-xt-9pK" customClass="ZFNavigationController" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xci-xt-9pK" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FoF-y3-9m7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

@@ -1,5 +1,5 @@
 //
-//  ZFNavigationController.m
+//  UINavigationController+ZFFullscreenPopGesture.m
 //
 // Copyright (c) 2016年 任子丰 ( http://github.com/renzifeng )
 //
@@ -21,8 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "ZFNavigationController.h"
-#import "ZFScreenShotView.h"
+#import "UINavigationController+ZFFullscreenPopGesture.h"
 #import <objc/runtime.h>
 
 #define APP_WINDOW                  [UIApplication sharedApplication].delegate.window
@@ -97,29 +96,85 @@
 
 @end
 
-@interface ZFNavigationController ()<UIGestureRecognizerDelegate>
+@implementation UINavigationController (ZFFullscreenPopGesture)
 
-@property (nonatomic, strong) NSMutableArray<UIImage *> *childVCImages; //保存截屏的数组
-@property (nonatomic, strong) ZFScreenShotView          *screenShotView;
-@property (nonatomic, assign) BOOL                      zf_viewControllerBasedNavigationBarAppearanceEnabled;
-@property (nonatomic, assign) CGFloat                   showViewOffsetScale;
-@property (nonatomic, assign) CGFloat                   showViewOffset;
-
-@end
-
-@implementation ZFNavigationController
-
-- (void)loadView {
-    [super loadView];
-    //self.interactivePopGestureRecognizer.delegate = self; //系统的返回手势代理
-    self.interactivePopGestureRecognizer.enabled = NO;      //屏蔽系统的返回手势
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SEL selectors[] = {
+            @selector(viewDidLoad),
+            @selector(pushViewController:animated:),
+            @selector(popToViewController:animated:),
+            @selector(popToRootViewControllerAnimated:)
+        };
+        for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index) {
+            SEL originalSelector = selectors[index];
+            SEL swizzledSelector = NSSelectorFromString([@"zf_" stringByAppendingString:NSStringFromSelector(originalSelector)]);
+            Method originalMethod = class_getInstanceMethod(self, originalSelector);
+            Method swizzledMethod = class_getInstanceMethod(self, swizzledSelector);
+            if (class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))) {
+                class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
+            } else {
+                method_exchangeImplementations(originalMethod, swizzledMethod);
+            }
+        }
+    });
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (NSMutableArray<UIImage *> *)childVCImages {
+    NSMutableArray *images = objc_getAssociatedObject(self, _cmd);
+    if (!images) {
+        images = @[].mutableCopy;
+        objc_setAssociatedObject(self, _cmd, images, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return images;
+}
+
+- (ZFScreenShotView *)screenShotView {
+    ZFScreenShotView *shotView = objc_getAssociatedObject(self, _cmd);
+    if (!shotView) {
+        shotView = [[ZFScreenShotView alloc] init];
+        shotView.hidden = YES;
+        [APP_WINDOW insertSubview:shotView atIndex:0];
+        objc_setAssociatedObject(self, _cmd, shotView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return shotView;
+}
+
+- (void)setZf_viewControllerBasedNavigationBarAppearanceEnabled:(BOOL)zf_viewControllerBasedNavigationBarAppearanceEnabled {
+    objc_setAssociatedObject(self, @selector(zf_viewControllerBasedNavigationBarAppearanceEnabled), @(zf_viewControllerBasedNavigationBarAppearanceEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+}
+
+- (BOOL)zf_viewControllerBasedNavigationBarAppearanceEnabled {
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
+}
+
+- (void)setShowViewOffset:(CGFloat)showViewOffset {
+    objc_setAssociatedObject(self, @selector(showViewOffset), @(showViewOffset), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
+- (CGFloat)showViewOffset {
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+- (void)setShowViewOffsetScale:(CGFloat)showViewOffsetScale {
+    objc_setAssociatedObject(self, @selector(showViewOffsetScale), @(showViewOffsetScale), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
+- (CGFloat)showViewOffsetScale {
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+- (void)zf_viewDidLoad {
+    [self zf_viewDidLoad];
+    self.interactivePopGestureRecognizer.enabled = NO;
     self.zf_viewControllerBasedNavigationBarAppearanceEnabled = YES;
     self.showViewOffsetScale = 1 / 3.0;
     self.showViewOffset = self.showViewOffsetScale * SCREEN_WIDTH;
+    self.screenShotView.hidden = YES;
     // 设置阴影
     // self.view.layer.shadowColor = [[UIColor grayColor] CGColor];
     // self.view.layer.shadowOpacity = 0.7;
@@ -130,7 +185,7 @@
     [self.view addGestureRecognizer:popRecognizer];         //自定义的滑动返回手势
 }
 
-- (void)fd_setupViewControllerBasedNavigationBarAppearanceIfNeeded:(UIViewController *)appearingViewController
+- (void)zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:(UIViewController *)appearingViewController
 {
     if (!self.zf_viewControllerBasedNavigationBarAppearanceEnabled) {
         return;
@@ -143,7 +198,6 @@
             [strongSelf setNavigationBarHidden:viewController.zf_prefersNavigationBarHidden animated:animated];
         }
     };
-    
     appearingViewController.zf_willAppearInjectBlock = block;
     UIViewController *disappearingViewController = self.viewControllers.lastObject;
     if (disappearingViewController && !disappearingViewController.zf_willAppearInjectBlock) {
@@ -152,22 +206,24 @@
 }
 
 #pragma mark - 重写父类方法
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
+
+- (void)zf_pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     if (self.childViewControllers.count > 0) {
         [self createScreenShot];
     }
-    // Handle perferred navigation bar appearance.
-    [self fd_setupViewControllerBasedNavigationBarAppearanceIfNeeded:viewController];
-    [super pushViewController:viewController animated:animated];
+    [self zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:viewController];
+    if (![self.viewControllers containsObject:viewController]) {
+        [self zf_pushViewController:viewController animated:animated];
+    }
 }
 
-- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
+- (UIViewController *)zf_popViewControllerAnimated:(BOOL)animated {
     [self.childVCImages removeLastObject];
-    return [super popViewControllerAnimated:animated];
+    return [self zf_popViewControllerAnimated:animated];
 }
 
-- (NSArray<UIViewController *> *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    NSArray *viewControllers = [super popToViewController:viewController animated:animated];
+- (NSArray<UIViewController *> *)zf_popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSArray *viewControllers = [self zf_popToViewController:viewController animated:animated];
     if (self.childVCImages.count >= viewControllers.count){
         for (int i = 0; i < viewControllers.count; i++) {
             [self.childVCImages removeLastObject];
@@ -176,17 +232,18 @@
     return viewControllers;
 }
 
-- (NSArray<UIViewController *> *)popToRootViewControllerAnimated:(BOOL)animated {
+- (NSArray<UIViewController *> *)zf_popToRootViewControllerAnimated:(BOOL)animated {
+    
     [self.childVCImages removeAllObjects];
-    return [super popToRootViewControllerAnimated:animated];
+    return [self zf_popToRootViewControllerAnimated:animated];
 }
 
 - (void)dragging:(UIPanGestureRecognizer *)recognizer{
-    //如果只有1个子控制器,停止拖拽
+    // 如果只有1个子控制器,停止拖拽
     if (self.viewControllers.count <= 1) return;
-    //在x方向上移动的距离
+    // 在x方向上移动的距离
     CGFloat tx = [recognizer translationInView:self.view].x;
-    //在x方向上移动的距离除以屏幕的宽度
+    // 在x方向上移动的距离除以屏幕的宽度
     CGFloat width_scale;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         // 添加截图到最后面
@@ -197,21 +254,22 @@
         self.screenShotView.maskView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.4];
     } else if (recognizer.state == UIGestureRecognizerStateChanged){
         // 移动view
-            width_scale = tx / SCREEN_WIDTH;
-            self.view.transform = CGAffineTransformTranslate(CGAffineTransformIdentity,tx, 0);;
-            self.screenShotView.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4 - width_scale * 0.5];
-            self.screenShotView.imageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset + tx * self.showViewOffsetScale, 0);
+        width_scale = tx / SCREEN_WIDTH;
+        self.view.transform = CGAffineTransformTranslate(CGAffineTransformIdentity,tx, 0);;
+        self.screenShotView.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4 - width_scale * 0.5];
+        self.screenShotView.imageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset + tx * self.showViewOffsetScale, 0);
 
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint velocity = [recognizer velocityInView:self.view];
         BOOL reset = velocity.x < 0;
         // 决定pop还是还原
-        if (tx >= MAX_PAN_DISTANCE) {
+        if (tx >= MAX_PAN_DISTANCE && !reset) {
             [UIView animateWithDuration:0.25 animations:^{
                 self.screenShotView.maskView.backgroundColor = [UIColor clearColor];
                 self.screenShotView.imageView.transform = reset ? CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset, 0) : CGAffineTransformIdentity;
                 self.view.transform = reset ? CGAffineTransformIdentity : CGAffineTransformTranslate(CGAffineTransformIdentity, SCREEN_WIDTH, 0);
             } completion:^(BOOL finished) {
+                [self.childVCImages removeLastObject];
                 [self popViewControllerAnimated:NO];
                 self.screenShotView.hidden = YES;
                 self.view.transform = CGAffineTransformIdentity;
@@ -221,19 +279,12 @@
             [UIView animateWithDuration:0.25 animations:^{
                 self.screenShotView.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4 + width_scale * 0.5];
                 self.view.transform = CGAffineTransformIdentity;
+                self.screenShotView.imageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset, 0);
             } completion:^(BOOL finished) {
                 self.screenShotView.imageView.transform = CGAffineTransformIdentity;
             }];
         }
     }
-}
-
-// 保存截屏的数组
-- (NSMutableArray<UIImage *> *)childVCImages {
-    if (!_childVCImages) {
-        _childVCImages = [[NSMutableArray alloc] initWithCapacity:1];
-    }
-    return _childVCImages;
 }
 
 // 截屏
@@ -247,7 +298,7 @@
     }
 }
 
-//手势代理
+// 手势代理
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (self.visibleViewController.zf_interactivePopDisabled)     return NO;
     if (self.viewControllers.count <= 1)                          return NO;
@@ -260,7 +311,7 @@
     return NO;
 }
 
-//是否与其他手势共存，一般使用默认值(默认返回NO：不与任何手势共存)
+// 是否与其他手势共存，一般使用默认值(默认返回NO：不与任何手势共存)
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if (self.visibleViewController.zf_recognizeSimultaneouslyEnable) {
         if ([otherGestureRecognizer isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")] || [otherGestureRecognizer isKindOfClass:NSClassFromString(@"UIPanGestureRecognizer")] ) {
@@ -268,16 +319,6 @@
         }
     }
     return NO;
-}
-#pragma mark
-
-- (ZFScreenShotView *)screenShotView {
-    if (!_screenShotView) {
-        _screenShotView = [[ZFScreenShotView alloc] init];
-        _screenShotView.hidden = YES;
-        [APP_WINDOW insertSubview:_screenShotView atIndex:0];
-    }
-    return _screenShotView;
 }
 
 @end

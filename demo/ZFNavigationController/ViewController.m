@@ -6,8 +6,8 @@
 //  Copyright © 2017年 任子丰. All rights reserved.
 //
 
-#import "ViewController.h"
-#import "ZFNavigationController.h"
+#import "ViewController.h" 
+#import "UINavigationController+ZFFullscreenPopGesture.h"
 
 @interface ViewController ()
 
@@ -18,10 +18,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // 具体在storyboard中
-    // 某一控制器禁止滑动手势可以这样：
-    self.zf_interactivePopDisabled = YES;
-    // 某一控制器不显示导航可以这样：
-    self.zf_prefersNavigationBarHidden = YES;
+    
+    // 某一控制器禁止滑动手势
+    // self.zf_interactivePopDisabled = YES;
+    // 某一控制器不显示导航 
+    // self.zf_prefersNavigationBarHidden = YES;
 }
 
 
