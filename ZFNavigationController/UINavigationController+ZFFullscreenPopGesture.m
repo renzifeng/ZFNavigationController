@@ -229,6 +229,7 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     if (self.viewControllers.count <= 1) return;
     // 在x方向上移动的距离
     CGFloat tx = [recognizer translationInView:self.view].x;
+    
     // 在x方向上移动的距离除以屏幕的宽度
     CGFloat width_scale;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -239,6 +240,7 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
         self.screenShotView.imageView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -self.showViewOffset, 0);
         self.screenShotView.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
     } else if (recognizer.state == UIGestureRecognizerStateChanged){
+        if (tx < 0 ) { return; }
         // 移动view
         width_scale = tx / SCREEN_WIDTH;
         self.view.transform = CGAffineTransformTranslate(CGAffineTransformIdentity,tx, 0);
