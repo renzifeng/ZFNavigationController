@@ -22,13 +22,9 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "ZFScreenShotView.h"
-
-typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewController, BOOL animated);
 
 @interface UIViewController (ZFFullscreenPopGesture)
 
-@property (nonatomic, copy) _ZFViewControllerWillAppearInjectBlock zf_willAppearInjectBlock;
 /// 隐藏NavigationBar（默认NO）
 @property (nonatomic, assign) BOOL zf_prefersNavigationBarHidden;
 /// 关闭某个控制器的pop手势（默认NO）
@@ -38,7 +34,14 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 
 @end
 
+typedef NS_ENUM(NSInteger,ZFFullscreenPopGestureStyle) {
+    ZFFullscreenPopGestureGradientStyle,   // 根据滑动偏移量背景颜色渐变
+    ZFFullscreenPopGestureShadowStyle      // 侧边阴影效果，类似系统的滑动样式
+};
+
 @interface UINavigationController (ZFFullscreenPopGesture)<UIGestureRecognizerDelegate>
+/** 默认ZFFullscreenPopGestureGradientStyle */
+@property (nonatomic, assign) ZFFullscreenPopGestureStyle popGestureStyle;
 
 @end
 

@@ -16,7 +16,6 @@
 		CCD7ECE41E72A40100A9207F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCD7ECE21E72A40100A9207F /* LaunchScreen.storyboard */; };
 		CCD7ECEF1E72A40200A9207F /* ZFNavigationControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECEE1E72A40200A9207F /* ZFNavigationControllerTests.m */; };
 		CCD7ECFA1E72A40200A9207F /* ZFNavigationControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ECF91E72A40200A9207F /* ZFNavigationControllerUITests.m */; };
-		CCD7ED191E72AACD00A9207F /* ZFScreenShotView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +54,6 @@
 		CCD7ECF51E72A40200A9207F /* ZFNavigationControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZFNavigationControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCD7ECF91E72A40200A9207F /* ZFNavigationControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZFNavigationControllerUITests.m; sourceTree = "<group>"; };
 		CCD7ECFB1E72A40200A9207F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CCD7ED161E72AACD00A9207F /* ZFScreenShotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFScreenShotView.h; sourceTree = "<group>"; };
-		CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFScreenShotView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,8 +149,6 @@
 			children = (
 				CCC20EAF1E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.h */,
 				CCC20EB01E794C100019B9D0 /* UINavigationController+ZFFullscreenPopGesture.m */,
-				CCD7ED161E72AACD00A9207F /* ZFScreenShotView.h */,
-				CCD7ED171E72AACD00A9207F /* ZFScreenShotView.m */,
 			);
 			name = ZFNavigationController;
 			path = ../ZFNavigationController;
@@ -299,7 +294,6 @@
 				CCD7ECDC1E72A40100A9207F /* ViewController.m in Sources */,
 				CCD7ECD91E72A40000A9207F /* AppDelegate.m in Sources */,
 				CCD7ECD61E72A40000A9207F /* main.m in Sources */,
-				CCD7ED191E72AACD00A9207F /* ZFScreenShotView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
