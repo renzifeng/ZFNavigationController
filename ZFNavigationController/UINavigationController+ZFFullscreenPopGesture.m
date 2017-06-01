@@ -143,9 +143,7 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
             @selector(pushViewController:animated:),
             @selector(popToViewController:animated:),
             @selector(popToRootViewControllerAnimated:),
-            @selector(popViewControllerAnimated:),
-            @selector(initWithRootViewController:),
-            @selector(initWithNibName:bundle:)
+            @selector(popViewControllerAnimated:)
         };
         for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index) {
             SEL originalSelector = selectors[index];
