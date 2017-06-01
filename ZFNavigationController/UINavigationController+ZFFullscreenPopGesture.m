@@ -143,7 +143,9 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
             @selector(pushViewController:animated:),
             @selector(popToViewController:animated:),
             @selector(popToRootViewControllerAnimated:),
-            @selector(popViewControllerAnimated:)
+            @selector(popViewControllerAnimated:),
+            @selector(initWithRootViewController:),
+            @selector(initWithNibName:bundle:)
         };
         for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index) {
             SEL originalSelector = selectors[index];
@@ -171,6 +173,9 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     UIPanGestureRecognizer *popRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragging:)];
     popRecognizer.delegate = self;
     [self.view addGestureRecognizer:popRecognizer];         //自定义的滑动返回手势
+    
+    UIViewController *vc = [self.viewControllers firstObject];
+    [self zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:vc];
 }
 
 - (void)zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:(UIViewController *)appearingViewController {
