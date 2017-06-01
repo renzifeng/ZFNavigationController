@@ -129,11 +129,11 @@
             </objects>
             <point key="canvasLocation" x="2852" y="139"/>
         </scene>
-        <!--Item-->
+        <!--Navigation Controller-->
         <scene sceneID="pHa-f1-f19">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xci-xt-9pK" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="mbs-3T-J9p"/>
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="mbs-3T-J9p"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FoF-y3-9m7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -166,11 +166,11 @@
             </objects>
             <point key="canvasLocation" x="169" y="569"/>
         </scene>
-        <!--Item-->
+        <!--Navigation Controller-->
         <scene sceneID="Z3W-wh-XH4">
             <objects>
                 <navigationController id="6uQ-mT-nNg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="69x-Bg-y1F"/>
+                    <tabBarItem key="tabBarItem" systemItem="search" id="69x-Bg-y1F"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mvS-Ix-Oql">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -186,7 +186,7 @@
         <!--has NavBar-->
         <scene sceneID="MC9-SQ-8dk">
             <objects>
-                <viewController id="mYQ-qR-7Sc" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="mYQ-qR-7Sc" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2Ea-HW-6bB"/>
                         <viewControllerLayoutGuide type="bottom" id="Ib4-Y7-x4m"/>

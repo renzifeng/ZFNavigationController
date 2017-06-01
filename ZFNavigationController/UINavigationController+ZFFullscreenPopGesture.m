@@ -143,7 +143,8 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
             @selector(pushViewController:animated:),
             @selector(popToViewController:animated:),
             @selector(popToRootViewControllerAnimated:),
-            @selector(popViewControllerAnimated:)
+            @selector(popViewControllerAnimated:),
+            @selector(initWithRootViewController:)
         };
         for (NSUInteger index = 0; index < sizeof(selectors) / sizeof(SEL); ++index) {
             SEL originalSelector = selectors[index];
@@ -162,7 +163,6 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 - (void)zf_viewDidLoad {
     [self zf_viewDidLoad];
     self.interactivePopGestureRecognizer.enabled = NO;
-    self.zf_viewControllerBasedNavigationBarAppearanceEnabled = YES;
     self.showViewOffsetScale = 1 / 3.0;
     self.showViewOffset = self.showViewOffsetScale * SCREEN_WIDTH;
     self.screenShotView.hidden = YES;
@@ -173,7 +173,9 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
     [self.view addGestureRecognizer:popRecognizer];         //自定义的滑动返回手势
     
     UIViewController *vc = [self.viewControllers firstObject];
-    [self zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:vc];
+    if (vc) {
+        [self zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:vc];
+    }
 }
 
 - (void)zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:(UIViewController *)appearingViewController {
@@ -196,6 +198,11 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 }
 
 #pragma mark - 重写父类方法
+
+- (instancetype)zf_initWithRootViewController:(UIViewController *)rootViewController {
+    [self zf_setupViewControllerBasedNavigationBarAppearanceIfNeeded:rootViewController];
+    return [self zf_initWithRootViewController:rootViewController];
+}
 
 - (void)zf_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     if (self.childViewControllers.count > 0) {
@@ -341,7 +348,12 @@ typedef void (^_ZFViewControllerWillAppearInjectBlock)(UIViewController *viewCon
 }
 
 - (BOOL)zf_viewControllerBasedNavigationBarAppearanceEnabled {
-    return [objc_getAssociatedObject(self, _cmd) boolValue];
+    NSNumber *number = objc_getAssociatedObject(self, _cmd);
+    if (number) {
+        return number.boolValue;
+    }
+    self.zf_viewControllerBasedNavigationBarAppearanceEnabled = YES;
+    return YES;
 }
 
 - (void)setShowViewOffset:(CGFloat)showViewOffset {

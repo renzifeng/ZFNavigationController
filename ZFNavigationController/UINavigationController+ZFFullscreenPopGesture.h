@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger,ZFFullscreenPopGestureStyle) {
 @interface UINavigationController (ZFFullscreenPopGesture)<UIGestureRecognizerDelegate>
 /** 默认ZFFullscreenPopGestureGradientStyle */
 @property (nonatomic, assign) ZFFullscreenPopGestureStyle popGestureStyle;
+@property (nonatomic, assign) BOOL zf_viewControllerBasedNavigationBarAppearanceEnabled;
 
 @end
 
